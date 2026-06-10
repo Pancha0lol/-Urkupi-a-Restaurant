@@ -1,0 +1,199 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Restaurante Urkupiña</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --gold: #C9A227;
+    --gold-light: #E8C84A;
+    --burgundy: #7A1E2E;
+    --dark: #2C1A0E;
+    --cream: #F5ECD7;
+    --cream-dark: #E8D5B0;
+    --text: #3A2410;
+  }
+  body {
+    font-family: 'Lato', sans-serif;
+    background: var(--dark);
+    min-height: 100vh;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    overflow: hidden;
+    position: relative;
+  }
+  /* Fondo decorativo andino */
+  body::before {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background: 
+      radial-gradient(ellipse at 20% 50%, rgba(201,162,39,0.12) 0%, transparent 60%),
+      radial-gradient(ellipse at 80% 50%, rgba(122,30,46,0.15) 0%, transparent 60%);
+    pointer-events: none;
+  }
+  /* Patrón wiphala sutil */
+  body::after {
+    content: '';
+    position: fixed;
+    inset: 0;
+    background-image: repeating-linear-gradient(
+      45deg,
+      rgba(201,162,39,0.03) 0px,
+      rgba(201,162,39,0.03) 2px,
+      transparent 2px,
+      transparent 20px
+    );
+    pointer-events: none;
+  }
+
+  .hero {
+    text-align: center;
+    z-index: 1;
+    padding: 2rem;
+    max-width: 700px;
+  }
+  .logo-ornament {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 1rem;
+    margin-bottom: 0.5rem;
+  }
+  .ornament-line {
+    height: 1px;
+    width: 80px;
+    background: linear-gradient(to right, transparent, var(--gold));
+  }
+  .ornament-line.right {
+    background: linear-gradient(to left, transparent, var(--gold));
+  }
+  .ornament-diamond {
+    width: 8px;
+    height: 8px;
+    background: var(--gold);
+    transform: rotate(45deg);
+  }
+  h1 {
+    font-family: 'Playfair Display', serif;
+    font-size: clamp(3rem, 8vw, 5.5rem);
+    font-weight: 900;
+    color: var(--cream);
+    letter-spacing: 0.04em;
+    line-height: 1;
+    text-shadow: 0 0 60px rgba(201,162,39,0.3);
+  }
+  h1 span {
+    color: var(--gold);
+  }
+  .tagline {
+    font-family: 'Lato', sans-serif;
+    font-weight: 300;
+    font-size: 1rem;
+    color: var(--cream-dark);
+    letter-spacing: 0.3em;
+    text-transform: uppercase;
+    margin: 1rem 0 3rem;
+    opacity: 0.8;
+  }
+
+  .modules-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 1.2rem;
+    width: 100%;
+    max-width: 640px;
+    margin: 0 auto;
+  }
+  .module-card {
+    background: rgba(245,236,215,0.06);
+    border: 1px solid rgba(201,162,39,0.25);
+    border-radius: 4px;
+    padding: 1.8rem 1rem 1.5rem;
+    text-align: center;
+    cursor: pointer;
+    transition: all 0.25s ease;
+    text-decoration: none;
+    display: block;
+    position: relative;
+    overflow: hidden;
+  }
+  .module-card::before {
+    content: '';
+    position: absolute;
+    bottom: 0; left: 0; right: 0;
+    height: 2px;
+    background: linear-gradient(to right, transparent, var(--gold), transparent);
+    transform: scaleX(0);
+    transition: transform 0.3s ease;
+  }
+  .module-card:hover {
+    background: rgba(201,162,39,0.12);
+    border-color: var(--gold);
+    transform: translateY(-3px);
+  }
+  .module-card:hover::before { transform: scaleX(1); }
+  .module-icon {
+    font-size: 2.2rem;
+    margin-bottom: 0.7rem;
+    display: block;
+  }
+  .module-title {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.05rem;
+    color: var(--cream);
+    font-weight: 700;
+    margin-bottom: 0.3rem;
+  }
+  .module-desc {
+    font-size: 0.72rem;
+    color: rgba(245,236,215,0.5);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+  }
+  .footer-note {
+    margin-top: 3rem;
+    font-size: 0.72rem;
+    color: rgba(245,236,215,0.3);
+    letter-spacing: 0.15em;
+    text-transform: uppercase;
+  }
+</style>
+</head>
+<body>
+<div class="hero">
+  <div class="logo-ornament">
+    <div class="ornament-line"></div>
+    <div class="ornament-diamond"></div>
+    <div class="ornament-line right"></div>
+  </div>
+  <h1>Urku<span>piña</span></h1>
+  <p class="tagline">Sabores del corazón de Bolivia</p>
+
+  <div class="modules-grid">
+    <a href="tomar-pedido.html" class="module-card">
+      <span class="module-icon">📋</span>
+      <div class="module-title">Tomar Pedido</div>
+      <div class="module-desc">Meseros</div>
+    </a>
+    <a href="cocina.html" class="module-card">
+      <span class="module-icon">👨‍🍳</span>
+      <div class="module-title">Cocina</div>
+      <div class="module-desc">Chef & equipo</div>
+    </a>
+    <a href="gerencia.html" class="module-card">
+      <span class="module-icon">📊</span>
+      <div class="module-title">Gerencia</div>
+      <div class="module-desc">Administración</div>
+    </a>
+  </div>
+
+  <p class="footer-note">Acceso restringido — Solo personal autorizado</p>
+</div>
+</body>
+</html>

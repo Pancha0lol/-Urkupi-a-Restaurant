@@ -1,0 +1,400 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Cocina — Urkupiña</title>
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;700;900&family=Lato:wght@300;400;700&display=swap" rel="stylesheet">
+<style>
+  *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+  :root {
+    --gold: #C9A227;
+    --gold-light: #E8C84A;
+    --burgundy: #7A1E2E;
+    --dark: #1A0A04;
+    --panel: #22120A;
+    --cream: #F5ECD7;
+    --cream-dark: #E8D5B0;
+    --green: #2D6A4F;
+    --green-mid: #40916C;
+    --green-light: #52B788;
+    --orange: #E07A3A;
+    --orange-dark: #B85A1A;
+    --red: #C0392B;
+  }
+  body {
+    font-family: 'Lato', sans-serif;
+    background: var(--dark);
+    min-height: 100vh;
+    color: var(--cream);
+  }
+
+  /* MODAL */
+  .modal-overlay {
+    position: fixed; inset: 0;
+    background: rgba(10,5,2,0.96);
+    display: flex; align-items: center; justify-content: center;
+    z-index: 1000; backdrop-filter: blur(4px);
+  }
+  .modal-box {
+    background: #2C1A0E; border: 1px solid rgba(201,162,39,0.4);
+    border-radius: 6px; padding: 2.5rem 2rem;
+    width: 100%; max-width: 380px; text-align: center;
+    box-shadow: 0 20px 60px rgba(0,0,0,0.6);
+  }
+  .modal-icon { font-size: 2.5rem; margin-bottom: 1rem; }
+  .modal-title { font-family: 'Playfair Display', serif; font-size: 1.5rem; color: var(--gold); margin-bottom: 0.4rem; }
+  .modal-subtitle { font-size: 0.8rem; color: rgba(245,236,215,0.5); letter-spacing: 0.1em; text-transform: uppercase; margin-bottom: 2rem; }
+  .modal-input {
+    width: 100%; padding: 0.85rem 1rem;
+    background: rgba(245,236,215,0.07); border: 1px solid rgba(201,162,39,0.3);
+    border-radius: 4px; color: var(--cream); font-family: 'Lato', sans-serif;
+    font-size: 1.3rem; letter-spacing: 0.4em; text-align: center;
+    margin-bottom: 1rem; outline: none; transition: border-color 0.2s;
+  }
+  .modal-input:focus { border-color: var(--gold); }
+  .modal-btn {
+    width: 100%; padding: 0.85rem;
+    background: var(--gold); color: var(--dark);
+    border: none; border-radius: 4px;
+    font-family: 'Lato', sans-serif; font-size: 0.9rem;
+    font-weight: 700; letter-spacing: 0.1em; text-transform: uppercase;
+    cursor: pointer; transition: background 0.2s;
+  }
+  .modal-btn:hover { background: var(--gold-light); }
+  .modal-error { color: #ff6b6b; font-size: 0.8rem; margin-top: 0.7rem; min-height: 1.2em; }
+  .modal-back { display: inline-block; margin-top: 1.2rem; font-size: 0.78rem; color: rgba(245,236,215,0.4); text-decoration: none; letter-spacing: 0.08em; transition: color 0.2s; }
+  .modal-back:hover { color: var(--gold); }
+
+  /* APP */
+  .app { display: none; min-height: 100vh; flex-direction: column; }
+  .app.visible { display: flex; }
+
+  .header {
+    background: rgba(34,18,10,0.97);
+    border-bottom: 1px solid rgba(201,162,39,0.2);
+    padding: 1rem 2rem;
+    display: flex; align-items: center; justify-content: space-between;
+    position: sticky; top: 0; z-index: 100;
+  }
+  .header-brand { font-family: 'Playfair Display', serif; font-size: 1.4rem; color: var(--gold); font-weight: 900; }
+  .header-brand span { color: var(--cream); font-size: 0.85rem; font-weight: 300; margin-left: 0.5rem; font-family: 'Lato', sans-serif; letter-spacing: 0.1em; }
+  .header-right { display: flex; align-items: center; gap: 1rem; }
+  .live-badge {
+    display: flex; align-items: center; gap: 0.4rem;
+    font-size: 0.75rem; color: var(--green-light);
+    letter-spacing: 0.08em; text-transform: uppercase;
+  }
+  .live-dot {
+    width: 8px; height: 8px;
+    background: var(--green-light);
+    border-radius: 50%;
+    animation: pulse 1.5s infinite;
+  }
+  @keyframes pulse {
+    0%, 100% { opacity: 1; transform: scale(1); }
+    50% { opacity: 0.5; transform: scale(0.7); }
+  }
+  .btn-nav {
+    padding: 0.4rem 0.9rem; border-radius: 3px;
+    font-size: 0.78rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    cursor: pointer; border: 1px solid; transition: all 0.2s;
+    font-family: 'Lato', sans-serif;
+    background: transparent; border-color: rgba(201,162,39,0.4);
+    color: var(--cream-dark); text-decoration: none;
+    display: inline-block;
+  }
+  .btn-nav:hover { border-color: var(--gold); color: var(--gold); }
+
+  .content { flex: 1; padding: 1.5rem 2rem 3rem; max-width: 1200px; width: 100%; margin: 0 auto; }
+
+  .page-header {
+    display: flex; align-items: flex-end; justify-content: space-between;
+    margin-bottom: 2rem; flex-wrap: wrap; gap: 1rem;
+  }
+  .page-title { font-family: 'Playfair Display', serif; font-size: 1.6rem; color: var(--cream); }
+  .page-sub { font-size: 0.82rem; color: rgba(245,236,215,0.4); letter-spacing: 0.08em; text-transform: uppercase; margin-top: 0.2rem; }
+
+  .tabs {
+    display: flex; gap: 0.5rem; margin-bottom: 1.5rem;
+    border-bottom: 1px solid rgba(201,162,39,0.15);
+    padding-bottom: 0;
+  }
+  .tab {
+    padding: 0.6rem 1.2rem;
+    font-size: 0.82rem; font-weight: 700;
+    letter-spacing: 0.08em; text-transform: uppercase;
+    color: rgba(245,236,215,0.4);
+    cursor: pointer;
+    border-bottom: 2px solid transparent;
+    margin-bottom: -1px;
+    transition: all 0.2s;
+    font-family: 'Lato', sans-serif;
+    background: none; border-top: none; border-left: none; border-right: none;
+  }
+  .tab:hover { color: var(--cream); }
+  .tab.active { color: var(--gold); border-bottom-color: var(--gold); }
+  .tab-count {
+    display: inline-flex; align-items: center; justify-content: center;
+    width: 18px; height: 18px;
+    background: var(--burgundy);
+    border-radius: 50%;
+    font-size: 0.65rem;
+    color: white;
+    margin-left: 0.4rem;
+    font-weight: 700;
+  }
+
+  /* PEDIDOS GRID */
+  .pedidos-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 1rem;
+  }
+  .pedido-card {
+    background: var(--panel);
+    border: 1px solid rgba(201,162,39,0.15);
+    border-radius: 6px;
+    overflow: hidden;
+    transition: border-color 0.2s;
+  }
+  .pedido-card.urgente { border-color: rgba(224,122,58,0.5); }
+  .pedido-card-header {
+    padding: 0.85rem 1rem;
+    display: flex; align-items: center; justify-content: space-between;
+    border-bottom: 1px solid rgba(201,162,39,0.1);
+  }
+  .pedido-mesa {
+    font-family: 'Playfair Display', serif;
+    font-size: 1.1rem; font-weight: 700;
+    color: var(--gold);
+  }
+  .pedido-hora {
+    font-size: 0.75rem; color: rgba(245,236,215,0.4);
+    letter-spacing: 0.05em;
+  }
+  .estado-badge {
+    display: inline-flex; align-items: center; gap: 0.3rem;
+    font-size: 0.65rem; font-weight: 700;
+    letter-spacing: 0.07em; text-transform: uppercase;
+    padding: 0.2rem 0.55rem; border-radius: 20px;
+  }
+  .estado-pendiente { background: rgba(224,122,58,0.2); color: #E8944A; border: 1px solid rgba(224,122,58,0.4); }
+  .estado-preparando { background: rgba(201,162,39,0.2); color: var(--gold); border: 1px solid rgba(201,162,39,0.4); }
+  .estado-listo { background: rgba(45,106,79,0.2); color: var(--green-light); border: 1px solid rgba(45,106,79,0.4); }
+  .estado-entregado { background: rgba(245,236,215,0.07); color: rgba(245,236,215,0.35); border: 1px solid rgba(245,236,215,0.1); }
+
+  .pedido-items { padding: 0.8rem 1rem; }
+  .pedido-item-row {
+    display: flex; align-items: flex-start; gap: 0.6rem;
+    padding: 0.4rem 0;
+    border-bottom: 1px solid rgba(245,236,215,0.05);
+  }
+  .pedido-item-row:last-child { border-bottom: none; }
+  .item-emoji { font-size: 1rem; flex-shrink: 0; margin-top: 1px; }
+  .item-info { flex: 1; }
+  .item-nombre { font-size: 0.88rem; color: var(--cream); font-weight: 700; }
+  .item-detalle { font-size: 0.72rem; color: rgba(245,236,215,0.45); margin-top: 0.15rem; }
+  .item-qty {
+    font-family: 'Playfair Display', serif;
+    font-size: 1rem; font-weight: 900;
+    color: var(--gold);
+    background: rgba(201,162,39,0.12);
+    border-radius: 3px;
+    padding: 0.1rem 0.45rem;
+    min-width: 28px; text-align: center;
+    flex-shrink: 0;
+  }
+
+  .pedido-actions {
+    padding: 0.75rem 1rem;
+    border-top: 1px solid rgba(201,162,39,0.1);
+    display: flex; gap: 0.5rem;
+  }
+  .btn-estado {
+    flex: 1; padding: 0.55rem 0.5rem;
+    border-radius: 3px; font-size: 0.75rem;
+    font-weight: 700; letter-spacing: 0.06em;
+    text-transform: uppercase; cursor: pointer;
+    border: 1px solid; transition: all 0.2s;
+    font-family: 'Lato', sans-serif;
+  }
+  .btn-preparar { background: rgba(201,162,39,0.12); border-color: rgba(201,162,39,0.4); color: var(--gold); }
+  .btn-preparar:hover { background: rgba(201,162,39,0.25); }
+  .btn-listo { background: rgba(45,106,79,0.12); border-color: rgba(45,106,79,0.4); color: var(--green-light); }
+  .btn-listo:hover { background: rgba(45,106,79,0.25); }
+  .btn-entregar { background: rgba(245,236,215,0.05); border-color: rgba(245,236,215,0.15); color: rgba(245,236,215,0.4); }
+  .btn-entregar:hover { background: rgba(245,236,215,0.1); color: var(--cream); }
+
+  .empty-state {
+    text-align: center; padding: 4rem 2rem;
+    color: rgba(245,236,215,0.3);
+  }
+  .empty-icon { font-size: 3rem; margin-bottom: 1rem; }
+  .empty-text { font-size: 0.9rem; }
+  .empty-sub { font-size: 0.78rem; margin-top: 0.5rem; opacity: 0.6; }
+</style>
+</head>
+<body>
+
+<!-- MODAL -->
+<div class="modal-overlay" id="modalOverlay">
+  <div class="modal-box">
+    <div class="modal-icon">🍳</div>
+    <div class="modal-title">Área Restringida</div>
+    <div class="modal-subtitle">Cocina — Solo chef y equipo</div>
+    <input type="password" class="modal-input" id="passInput" placeholder="• • • •" maxlength="10" />
+    <button class="modal-btn" onclick="verificarClave()">Ingresar</button>
+    <div class="modal-error" id="passError"></div>
+    <a href="index.html" class="modal-back">← Volver al inicio</a>
+  </div>
+</div>
+
+<!-- APP -->
+<div class="app" id="mainApp">
+  <header class="header">
+    <div class="header-brand">Urkupiña <span>/ Cocina</span></div>
+    <div class="header-right">
+      <div class="live-badge"><div class="live-dot"></div>En vivo</div>
+      <a href="index.html"><button class="btn-nav">Inicio</button></a>
+    </div>
+  </header>
+
+  <div class="content">
+    <div class="page-header">
+      <div>
+        <h2 class="page-title">Panel de Cocina</h2>
+        <p class="page-sub">Pedidos en tiempo real</p>
+      </div>
+    </div>
+
+    <div class="tabs">
+      <button class="tab active" onclick="setTab('pendiente', this)">
+        Pendientes <span class="tab-count" id="cnt-pendiente">0</span>
+      </button>
+      <button class="tab" onclick="setTab('preparando', this)">
+        Preparando <span class="tab-count" id="cnt-preparando">0</span>
+      </button>
+      <button class="tab" onclick="setTab('listo', this)">
+        Listos <span class="tab-count" id="cnt-listo">0</span>
+      </button>
+      <button class="tab" onclick="setTab('entregado', this)">
+        Entregados <span class="tab-count" id="cnt-entregado">0</span>
+      </button>
+    </div>
+
+    <div class="pedidos-grid" id="pedidosGrid"></div>
+  </div>
+</div>
+
+<script>
+const CLAVE = '2345';
+let tabActiva = 'pendiente';
+
+document.getElementById('passInput').addEventListener('keydown', e => {
+  if (e.key === 'Enter') verificarClave();
+});
+function verificarClave() {
+  const v = document.getElementById('passInput').value;
+  if (v === CLAVE) {
+    document.getElementById('modalOverlay').style.display = 'none';
+    document.getElementById('mainApp').classList.add('visible');
+    renderPedidos();
+    setInterval(renderPedidos, 3000); // actualiza cada 3s
+  } else {
+    const err = document.getElementById('passError');
+    err.textContent = 'Contraseña incorrecta.';
+    document.getElementById('passInput').value = '';
+    document.getElementById('passInput').focus();
+    setTimeout(() => err.textContent = '', 2500);
+  }
+}
+
+function setTab(estado, btn) {
+  tabActiva = estado;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  renderPedidos();
+}
+
+function getPedidos() {
+  return JSON.parse(localStorage.getItem('urku_pedidos') || '[]');
+}
+function savePedidos(pedidos) {
+  localStorage.setItem('urku_pedidos', JSON.stringify(pedidos));
+}
+
+function cambiarEstado(id, nuevoEstado) {
+  const pedidos = getPedidos();
+  const idx = pedidos.findIndex(p => p.id === id);
+  if (idx !== -1) {
+    pedidos[idx].estado = nuevoEstado;
+    savePedidos(pedidos);
+    renderPedidos();
+  }
+}
+
+function renderPedidos() {
+  const todos = getPedidos();
+  // Actualizar contadores
+  ['pendiente','preparando','listo','entregado'].forEach(estado => {
+    const cnt = todos.filter(p => p.estado === estado).length;
+    const el = document.getElementById(`cnt-${estado}`);
+    if (el) el.textContent = cnt;
+  });
+
+  const filtrados = todos.filter(p => p.estado === tabActiva).reverse();
+  const grid = document.getElementById('pedidosGrid');
+
+  if (filtrados.length === 0) {
+    grid.innerHTML = `
+      <div class="empty-state" style="grid-column:1/-1">
+        <div class="empty-icon">${tabActiva === 'pendiente' ? '🕐' : tabActiva === 'preparando' ? '👨‍🍳' : tabActiva === 'listo' ? '✅' : '📦'}</div>
+        <div class="empty-text">No hay pedidos ${tabActiva === 'pendiente' ? 'pendientes' : tabActiva === 'preparando' ? 'en preparación' : tabActiva === 'listo' ? 'listos' : 'entregados'}</div>
+        <div class="empty-sub">${tabActiva === 'pendiente' ? 'Los pedidos nuevos aparecerán aquí automáticamente' : ''}</div>
+      </div>`;
+    return;
+  }
+
+  grid.innerHTML = filtrados.map(p => {
+    const itemsHTML = p.items.map(item => `
+      <div class="pedido-item-row">
+        <span class="item-emoji">${item.emoji}</span>
+        <div class="item-info">
+          <div class="item-nombre">${item.plato}</div>
+          <div class="item-detalle">${item.tipo === 'completo' ? `Completo · Sopa: ${item.sopa}` : 'Solo segundo'}</div>
+        </div>
+        <div class="item-qty">×${item.cantidad}</div>
+      </div>
+    `).join('');
+
+    let accionesHTML = '';
+    if (p.estado === 'pendiente') {
+      accionesHTML = `<button class="btn-estado btn-preparar" onclick="cambiarEstado(${p.id},'preparando')">🔥 Preparar</button>`;
+    } else if (p.estado === 'preparando') {
+      accionesHTML = `<button class="btn-estado btn-listo" onclick="cambiarEstado(${p.id},'listo')">✅ Listo</button>`;
+    } else if (p.estado === 'listo') {
+      accionesHTML = `<button class="btn-estado btn-entregar" onclick="cambiarEstado(${p.id},'entregado')">🚶 Entregado</button>`;
+    }
+
+    const estadoLabel = { pendiente: 'Pendiente', preparando: 'Preparando', listo: 'Listo', entregado: 'Entregado' }[p.estado];
+    const estadoClass = `estado-${p.estado}`;
+
+    return `
+      <div class="pedido-card ${p.estado === 'pendiente' ? 'urgente' : ''}">
+        <div class="pedido-card-header">
+          <div>
+            <div class="pedido-mesa">🪑 Mesa ${p.mesa}</div>
+            <div class="pedido-hora">${p.fecha} · ${p.hora}</div>
+          </div>
+          <span class="estado-badge ${estadoClass}">${estadoLabel}</span>
+        </div>
+        <div class="pedido-items">${itemsHTML}</div>
+        ${accionesHTML ? `<div class="pedido-actions">${accionesHTML}</div>` : ''}
+      </div>`;
+  }).join('');
+}
+</script>
+</body>
+</html>
